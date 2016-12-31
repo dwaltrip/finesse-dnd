@@ -1,7 +1,7 @@
-import { assert } from './utils/core';
-import handleWithRedraw from './utils/handle-with-redraw';
+import { assert } from 'utils/core';
+import handleWithRedraw from './handle-with-redraw';
 
-export default function mithrilifyMetalDragon(metalDragon, m) {
+export default function wrap(metalDragon, m) {
   var _createDragItem = metalDragon.createDragItem;
   var _createDropzone = metalDragon.createDropzone;
 
