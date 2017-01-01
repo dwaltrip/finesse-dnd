@@ -1,12 +1,16 @@
 {
   "name": "domless-dnd",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "Drag & drop library that doesn't directly touch the DOM",
   "main": "domless-dnd.js",
   "scripts": {
+    "watch:lib:js": "babel $npm_package_config_src_dir -w -d $npm_package_config_build_dir --presets babel-preset-es2015",
     "prebuild:demo": "shx mkdir -p demo/dist",
-    "build:demo": "browserify demo/app.js -o demo/dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:demo": "browserify demo/app.js -t babelify --outfile demo/dist/app.js"
+  },
+  "config": {
+    "src_dir": "src",
+    "build_dir": "dist"
   },
   "keywords": [
     "drag and drop",
@@ -16,12 +20,15 @@
     "spa"
   ],
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/dwaltrip/domless-dnd.git"
+    "type": "git",
+    "url": "https://github.com/dwaltrip/domless-dnd.git"
   },
   "author": "Daniel Waltrip",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "mithril": "^0.2.5",
     "shx": "^0.1.4"

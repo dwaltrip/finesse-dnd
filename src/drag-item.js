@@ -172,6 +172,7 @@ export default {
 
     _startDrag: function() {
       this.dragCursor.style.display = '';
+      this._element.classList.add('dnd--is-dragging');
     },
 
     attachToElement: function(element) {
@@ -235,10 +236,7 @@ export default {
         this._startDrag();
         this.manager._startDrag(this, event);
         document.documentElement.style.cursor = 'move';
-      // }
-      // if (this.manager.isMidDrag()) {
         requestAnimationFrame(this._animateDragCursorPos.bind(this));
-        // UGHH how does this work with animation frame
       }
       if (this.manager.isMidDrag()) {
         this.manager.onMouseMove(event);
@@ -259,10 +257,13 @@ export default {
     },
 
     _postDragCleanup: function() {
-      this.dragCursor.remove();
+      if (this.dragCursor) { this.dragCursor.remove(); }
       this.dragCursor = null;
       this._dragCursorSize = null;
       this._dragData = {};
+      if (this._element) {
+        this._element.classList.remove('dnd--is-dragging');
+      }
 
       if (this.isMovementConstrained) {
         this._boundingRect = null;

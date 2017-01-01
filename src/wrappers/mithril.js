@@ -1,4 +1,4 @@
-import { assert } from 'utils/core';
+import { assert } from '../utils/core';
 import handleWithRedraw from './handle-with-redraw';
 
 export default function wrap(metalDragon, m) {
