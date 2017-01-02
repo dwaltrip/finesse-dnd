@@ -1,8 +1,8 @@
 {
-  "name": "domless-dnd",
+  "name": "finesse-dnd",
   "version": "0.1.0",
-  "description": "Drag & drop library that doesn't directly touch the DOM",
-  "main": "domless-dnd.js",
+  "description": "Powerful, lower-level drag & drop library that doesn't directly touch the DOM",
+  "main": "finesse-dnd.js",
   "scripts": {
     "prebuild:lib": "shx mkdir -p dist",
     "build:lib": "babel src -d dist",
@@ -19,11 +19,12 @@
     "dnd",
     "drag",
     "vdom",
-    "spa"
+    "spa",
+    "finesse"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dwaltrip/domless-dnd.git"
+    "url": "https://github.com/dwaltrip/finesse-dnd.git"
   },
   "author": "Daniel Waltrip",
   "license": "ISC",
