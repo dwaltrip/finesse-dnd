@@ -1,5 +1,5 @@
 import { assert } from './utils/core';
-import { DEFAULT_GROUP, DRAG_HANDLE_CSS_CLASS } from './constants';
+import { DEFAULT_GROUP, DRAG_HANDLE_CSS_CLASS, IS_DRAGGING_CSS_CLASS } from './constants';
 
 // TODO: allow user to change this
 const MIN_DIST_FOR_DRAG_START = 10;
@@ -166,13 +166,11 @@ export default {
           bottom: rect.bottom - cursorSize.height
         };
       }
-
-      // this._setDragCursorPos(event);
     },
 
     _startDrag: function() {
       this.dragCursor.style.display = '';
-      this._element.classList.add('dnd--is-dragging');
+      this._element.classList.add(IS_DRAGGING_CSS_CLASS);
     },
 
     attachToElement: function(element) {
@@ -262,7 +260,7 @@ export default {
       this._dragCursorSize = null;
       this._dragData = {};
       if (this._element) {
-        this._element.classList.remove('dnd--is-dragging');
+        this._element.classList.remove(IS_DRAGGING_CSS_CLASS);
       }
 
       if (this.isMovementConstrained) {

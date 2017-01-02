@@ -4,13 +4,15 @@
   "description": "Drag & drop library that doesn't directly touch the DOM",
   "main": "domless-dnd.js",
   "scripts": {
-    "watch:lib:js": "babel $npm_package_config_src_dir -w -d $npm_package_config_build_dir --presets babel-preset-es2015",
+    "prebuild:lib": "shx mkdir -p dist",
+    "build:lib": "babel src -d dist",
+
     "prebuild:demo": "shx mkdir -p demo/dist",
-    "build:demo": "browserify demo/app.js -t babelify --outfile demo/dist/app.js"
-  },
-  "config": {
-    "src_dir": "src",
-    "build_dir": "dist"
+    "build:demo": "browserify demo/app.js -t babelify --outfile demo/dist/app.js",
+    "prewatch:demo": "npm run build:demo",
+    "watch:demo": "watchify demo/app.js -t babelify --outfile demo/dist/app.js -v",
+
+    "prepublish": "npm run build:lib"
   },
   "keywords": [
     "drag and drop",
@@ -31,6 +33,7 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "mithril": "^0.2.5",
-    "shx": "^0.1.4"
+    "shx": "^0.1.4",
+    "watchify": "^3.8.0"
   }
 }

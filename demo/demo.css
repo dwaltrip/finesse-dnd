@@ -21,7 +21,7 @@ body {
   padding: 5px;
 }
 
-.box.md--is-drop-target {
+.box.dnd--is-drop-target {
   border: 2px solid #ffdc9c;
 }
 

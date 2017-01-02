@@ -26,7 +26,7 @@ var App = {
     window.ctrl = this;
     this.dnd = mithrilWrapper(Dnd.create(), m);
 
-    this.data = [{ name: 'Foo' }, { name: 'Baz' }];
+    this.data = [{ name: 'Foo' }, { name: 'Baz' }, { name: 'Testing..' }];
     this.boxes = [Box.create(), Box.create()];
 
     this.data.forEach((item, index) => {

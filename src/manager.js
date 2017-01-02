@@ -232,7 +232,6 @@ export default {
           this._ineligibleDropzones.push(dropzone);
         }
       });
-      console.log('_eligibleDropzones ---', this._eligibleDropzones.map(dz => dz.group).join(', '));
 
       this.isCheckingElementOverlap = !!this._eligibleDropzones.find(dz => dz.useDragElementOverlap);
 
