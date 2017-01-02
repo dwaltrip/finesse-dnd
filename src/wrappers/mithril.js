@@ -32,7 +32,6 @@ function mithrilifyItemOrZone(dragItemOrDropzone) {
     _attachToElement.call(dragItemOrDropzone, element);
     context.onunload = ()=> dragItemOrDropzone.unattachFromElement();
   };
-  // }, wrappedName);
 
   return dragItemOrDropzone;
 }
@@ -45,7 +44,6 @@ function eventHandlerDecorator(m, eventName, handler) {
     return handleWithRedraw(m, handler);
   } else if (eventName === 'mousemove') {
     return handleWithRedraw(m, handler, { throttleDelayAmount: 100 });
-    // return handler;
   } else {
     throw new Error('mouseEventHandlerDecorator -- invalid event:', eventName)
   }

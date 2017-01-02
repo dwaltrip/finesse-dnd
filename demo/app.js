@@ -34,15 +34,13 @@ var App = {
       this.boxes[0].add(item);
     });
 
-    this.createBoxDropzone = box => {
-      return this.dnd.createDropzone({
-        onDrop: dragItem => {
-          var item = dragItem.getItemData('item');
-          item.box.remove(item);
-          box.add(item);
-        }
-      });
-    };
+    this.createBoxDropzone = box => this.dnd.createDropzone({
+      onDrop: dragItem => {
+        var item = dragItem.getItemData('item');
+        item.box.remove(item);
+        box.add(item);
+      }
+    });
 
     this.zones = this.boxes.map(box => this.createBoxDropzone(box));
 
