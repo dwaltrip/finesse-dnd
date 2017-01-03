@@ -139,13 +139,13 @@ export default {
     },
 
     _handlePreDrag: function(event) {
+      this._dragData = {};
       this.mousedownPos = { x: event.clientX, y: event.clientY };
       document.addEventListener('mousemove', this._boundEventListeners.onmousemove, false);
       document.addEventListener('mouseup', this._boundEventListeners.onmouseup, false);
     },
 
     _prepForDrag: function(event) {
-      this._dragData = {};
       var element = this._element;
       var rect = element.getBoundingClientRect();
       this.initialCursorOffset = {
@@ -218,9 +218,9 @@ export default {
 
     _onMousedown: function(event) {
       if (!this.manager.isDebugging()) {
-        this.userEvents.beforeDrag.call(this, event);
         this.manager._handlePreDrag();
         this._handlePreDrag(event);
+        this.userEvents.beforeDrag.call(this, event);
       }
     },
 
