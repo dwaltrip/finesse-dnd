@@ -1,23 +1,23 @@
 import { assert } from '../utils/core';
 import handleWithRedraw from './handle-with-redraw';
 
-export default function wrap(metalDragon, m) {
-  var _createDragItem = metalDragon.createDragItem;
-  var _createDropzone = metalDragon.createDropzone;
+export default function forMithril(manager, m) {
+  var _createDragItem = manager.createDragItem;
+  var _createDropzone = manager.createDropzone;
 
-  metalDragon.createDragItem = function() {
-    return mithrilifyItemOrZone(_createDragItem.apply(metalDragon, arguments));
+  manager.createDragItem = function() {
+    return mithrilifyItemOrZone(_createDragItem.apply(manager, arguments));
   };
-  metalDragon.createDropzone = function() {
-    return mithrilifyItemOrZone(_createDropzone.apply(metalDragon, arguments));
+  manager.createDropzone = function() {
+    return mithrilifyItemOrZone(_createDropzone.apply(manager, arguments));
   };
 
   // TODO: this is sloppy
-  metalDragon.eventHandlerDecorator = eventHandlerDecorator;
+  manager.eventHandlerDecorator = eventHandlerDecorator;
   assert(!!m, 'Must pass the mithril object');
-  metalDragon.m = m;
+  manager.m = m;
 
-  return metalDragon;
+  return manager;
 };
 
 
@@ -36,7 +36,7 @@ function mithrilifyItemOrZone(dragItemOrDropzone) {
   return dragItemOrDropzone;
 }
 
-// TODO: this still isn't ideal, as it requires that the user of metal-dragon
+// TODO: this still isn't ideal, as it requires that the user of finesse-dnd
 // knows how the library implementation makes use of the low level mouse events.
 // Perhaps creating higher level names like 'dragmove', 'dragover', 'dragend', etc would solve this?
 function eventHandlerDecorator(m, eventName, handler) {

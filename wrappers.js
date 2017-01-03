@@ -1,3 +1,3 @@
-var mithrilWrapper = require('./dist/wrappers/mithril').default;
+var forMithril = require('./dist/wrappers/mithril').default;
 
-exports.mithril = mithrilWrapper
+exports.forMithril = forMithril;
