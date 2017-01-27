@@ -1,17 +1,15 @@
 {
   "name": "finesse-dnd",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Powerful, lower-level drag & drop library that doesn't directly touch the DOM",
   "main": "finesse-dnd.js",
   "scripts": {
     "prebuild:lib": "shx mkdir -p dist",
     "build:lib": "babel src -d dist",
-
     "prebuild:demo": "shx mkdir -p demo/dist",
     "build:demo": "browserify demo/app.js -t babelify --outfile demo/dist/app.js",
     "prewatch:demo": "npm run build:demo",
     "watch:demo": "watchify demo/app.js -t babelify --outfile demo/dist/app.js -v",
-
     "prepublish": "npm run build:lib"
   },
   "keywords": [
