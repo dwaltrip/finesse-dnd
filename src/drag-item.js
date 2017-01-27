@@ -40,7 +40,8 @@ export default {
       beforeDrag: opts.beforeDrag || doNothing,
       onDragStart: opts.onDragStart || doNothing,
       onDrop: opts.onDrop || doNothing,
-      afterDrop: opts.afterDrop || doNothing
+      afterDrop: opts.afterDrop || doNothing,
+      onDragCancel: opts.onDragCancel || doNothing
     };
 
     instance.userHooks = {
@@ -114,7 +115,7 @@ export default {
     getDragData: function(key, defaultVal) {
       var errorMsg = `DragItem.getDragData - Invalid key '${key}'. Valid keys: ${Object.keys(this._dragData)}`;
       var hasDefault = typeof defaultVal !== 'undefined';
-      assert(key in this._dragData, errorMsg);
+      assert(key in this._dragData || hasDefault, errorMsg);
       return key in this._dragData ? this._dragData[key] : defaultVal;
     },
 
@@ -149,8 +150,8 @@ export default {
       var element = this._element;
       var rect = element.getBoundingClientRect();
       this.initialCursorOffset = {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+        x: this.mousedownPos.x - rect.left,
+        y: this.mousedownPos.y - rect.top
       };
       var dragCursor = this._setupDragCursor(element, event);
       this.userHooks.postProcessDragCursor(dragCursor);
@@ -249,6 +250,8 @@ export default {
         if (this.manager.hasTargetDropzone()) {
           this.userEvents.onDrop.call(this, event);
           this.userEvents.afterDrop.call(this, event);
+        } else {
+          this.userEvents.onDragCancel(this, event);
         }
       }
       this._postDragCleanup();
