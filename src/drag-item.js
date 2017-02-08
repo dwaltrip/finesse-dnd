@@ -209,7 +209,7 @@ export default {
     _setupDragCursor: function(element, event) {
       var sourceNode = this._getDragCursorSourceNode(element, event);
       var dragCursor = this.dragCursor = sourceNode.cloneNode(true);
-      dragCursor.style.position = 'absolute';
+      dragCursor.style.position = 'fixed';
       dragCursor.style.pointerEvents = 'none';
       dragCursor.style.display = 'none';
       dragCursor.classList.add(this.dragCursorClass);
