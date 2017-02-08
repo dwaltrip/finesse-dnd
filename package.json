@@ -1,6 +1,6 @@
 {
   "name": "finesse-dnd",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Powerful, lower-level drag & drop library that doesn't directly touch the DOM",
   "main": "finesse-dnd.js",
   "scripts": {
