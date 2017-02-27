@@ -254,8 +254,8 @@ export default {
         } else {
           this.userEvents.onDragCancel(this, event);
         }
-        this.userEvents.afterDrag.call(this, event);
       }
+      this.userEvents.afterDrag.call(this, event);
       this._postDragCleanup();
     },
 
