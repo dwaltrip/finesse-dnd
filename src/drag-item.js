@@ -40,6 +40,7 @@ export default {
       beforeDrag: opts.beforeDrag || doNothing,
       onDragStart: opts.onDragStart || doNothing,
       onDrop: opts.onDrop || doNothing,
+      afterDrag: opts.afterDrag || doNothing,
       afterDrop: opts.afterDrop || doNothing,
       onDragCancel: opts.onDragCancel || doNothing
     };
@@ -253,6 +254,7 @@ export default {
         } else {
           this.userEvents.onDragCancel(this, event);
         }
+        this.userEvents.afterDrag.call(this, event);
       }
       this._postDragCleanup();
     },
