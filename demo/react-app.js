@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-// TODO: figure out how to make finesse-dnd work with React
 import Dnd from '../src';
+import reactify from '../src/wrappers/react';
 
 var r = React.createElement;
 
-var dnd = Dnd.create();
+var dnd = reactify(Dnd.create());
 
 var BoxModel = {
   create: function(data) {
@@ -33,11 +33,13 @@ class Box extends Component {
   render() {
     var { box, i } = this.props;
     var boxClasses = `box box-${i+1}`;
-    var dropzoneRef = makeDndRef(box.dropzone);
-    return r('div', { className: boxClasses, ref: dropzoneRef }, box.items.map(item => {
+    return r('div', {
+      className: boxClasses,
+      ref: box.dropzone.syncToNode
+    }, box.items.map(item => {
       return r('div', {
         className: 'item',
-        ref: makeDndRef(item.dragItem),
+        ref: item.dragItem.syncToNode,
         key: item.name
       }, item.name);
     }));
@@ -64,32 +66,13 @@ class App extends Component {
       });
     });
 
-    this.state = { boxes: boxes, areBoxesShowing: true };
-  }
-  toggleBoxes() {
-    this.setState({
-      areBoxesShowing: !this.state.areBoxesShowing
-    });
+    this.state = { boxes: boxes };
   }
   render() {
-    return r('div', { className: 'demo-app' },
-      r('button', { onClick: ()=> this.toggleBoxes() }, 'Toggle Boxes'),
-
-      this.state.areBoxesShowing ? r('div', { className: 'box-list' },
-        this.state.boxes.map((box, i) => r(Box, { i, box, key: i }))
-      ) : null
-    );
+    return r('div', { className: 'demo-app' }, r('div', { className: 'box-list' },
+      this.state.boxes.map((box, i) => r(Box, { i, box, key: i }))
+    ));
   }
 }
 
 ReactDOM.render(r(App), document.getElementById('root'));
-
-function makeDndRef(dragItemOrDropzone) {
-  return function(element) {
-    if (element) {
-      dragItemOrDropzone.attachToElement(element);
-    } else {
-      dragItemOrDropzone.unattachFromElement();
-    }
-  }
-}
