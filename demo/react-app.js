@@ -30,22 +30,10 @@ var BoxModel = {
 const DATA = [{ name: 'Foo' }, { name: 'Baz' }, { name: 'Testing..' }];
 
 class Box extends Component {
-  constructor(props) {
-    super(props);
-    var box = this.props.box;
-    this.dropzone = dnd.createDropzone({
-      onDrop: dragItem => {
-        var item = dragItem.getItemData('item');
-        item.box.remove(item);
-        box.add(item);
-        this.forceUpdate();
-      }
-    });
-  }
   render() {
     var { box, i } = this.props;
     var boxClasses = `box box-${i+1}`;
-    var dropzoneRef = makeDndRef(this.dropzone);
+    var dropzoneRef = makeDndRef(box.dropzone);
     return r('div', { className: boxClasses, ref: dropzoneRef }, box.items.map(item => {
       return r('div', {
         className: 'item',
@@ -64,13 +52,32 @@ class App extends Component {
       item.dragItem = dnd.createDragItem({ itemData: { item } });
       boxes[0].add(item)
     });
-    this.state = { boxes: boxes };
+
+    boxes.forEach(box => {
+      box.dropzone = dnd.createDropzone({
+        onDrop: dragItem => {
+          var item = dragItem.getItemData('item');
+          item.box.remove(item);
+          box.add(item);
+          this.forceUpdate();
+        }
+      });
+    });
+
+    this.state = { boxes: boxes, areBoxesShowing: true };
+  }
+  toggleBoxes() {
+    this.setState({
+      areBoxesShowing: !this.state.areBoxesShowing
+    });
   }
   render() {
     return r('div', { className: 'demo-app' },
-      r('div', { className: 'box-list' },
+      r('button', { onClick: ()=> this.toggleBoxes() }, 'Toggle Boxes'),
+
+      this.state.areBoxesShowing ? r('div', { className: 'box-list' },
         this.state.boxes.map((box, i) => r(Box, { i, box, key: i }))
-      )
+      ) : null
     );
   }
 }
