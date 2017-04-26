@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 
 import Dnd from '../src';
@@ -8,35 +8,22 @@ var r = React.createElement;
 
 var dnd = reactify(Dnd.create());
 
-var BoxModel = {
-  create: function(data) {
-    var instance = Object.create(this.instance);
-    instance.items = data || [];
-    return instance;
-  },
-  instance: {
-    items: null,
-    remove: function(itemToRemove) {
-      itemToRemove.box = null;
-      this.items = this.items.filter(item => item !== itemToRemove);
-    },
-    add: function(item) {
-      item.box = this;
-      this.items.push(item);
-    }
-  }
-};
+const DATA = [
+  { name: 'Foo' },
+  { name: 'Baz' },
+  { name: 'Testing..' },
+  { name: 'Do all the good shit' },
+];
 
-const DATA = [{ name: 'Foo' }, { name: 'Baz' }, { name: 'Testing..' }];
-
-class Box extends Component {
+class Box extends PureComponent {
   render() {
-    var { box, i } = this.props;
+    var { items, dropzone, i } = this.props;
+    console.log('rendering box ' + i);
     var boxClasses = `box box-${i+1}`;
     return r('div', {
       className: boxClasses,
-      ref: box.dropzone.syncToNode
-    }, box.items.map(item => {
+      ref: dropzone.syncToNode
+    }, items.map(item => {
       return r('div', {
         className: 'item',
         ref: item.dragItem.syncToNode,
@@ -47,30 +34,49 @@ class Box extends Component {
 }
 
 class App extends Component {
-  constructor() {
-    super();
-    var boxes = [BoxModel.create(), BoxModel.create()];
+  constructor(props) {
+    super(props);
+
     DATA.forEach(item => {
       item.dragItem = dnd.createDragItem({ itemData: { item } });
-      boxes[0].add(item)
     });
 
-    boxes.forEach(box => {
-      box.dropzone = dnd.createDropzone({
+    this.state = {
+      itemLists: [DATA.slice(), [], []]
+    };
+
+    this.dropzones = this.state.itemLists.map((_, destListIndex) => {
+      return dnd.createDropzone({
         onDrop: dragItem => {
-          var item = dragItem.getItemData('item');
-          item.box.remove(item);
-          box.add(item);
-          this.forceUpdate();
+          var itemToMove = dragItem.getItemData('item');
+          var isDroppingOnSelf = this.state.itemLists[destListIndex].indexOf(itemToMove) > -1;
+
+          var prevLists = this.state.itemLists;
+
+          if (isDroppingOnSelf) {
+            var itemLists = [].concat(
+              prevLists.slice(0, destListIndex),
+              [prevLists[destListIndex].filter(item => item !== itemToMove).concat([itemToMove])],
+              prevLists.slice(destListIndex + 1)
+            )
+          } else {
+            var itemLists = prevLists.map((items, i)=> (i === destListIndex ?
+              items.concat(itemToMove) :
+              (items.indexOf(itemToMove) > -1 ? items.filter(item => item !== itemToMove) : items)
+            ));
+          }
+
+          this.setState({ itemLists });
         }
       });
     });
-
-    this.state = { boxes: boxes };
   }
   render() {
-    return r('div', { className: 'demo-app' }, r('div', { className: 'box-list' },
-      this.state.boxes.map((box, i) => r(Box, { i, box, key: i }))
+    return r('div', { className: 'demo-app' }, r('div', { className: 'boxes' },
+      this.state.itemLists.map((items, i) => {
+        var dropzone = this.dropzones[i];
+        return r(Box, { items, dropzone, i, key: i });
+      })
     ));
   }
 }

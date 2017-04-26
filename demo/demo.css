@@ -1,4 +1,8 @@
 
+div {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0 auto;
   color: #333;
@@ -12,17 +16,18 @@ body {
   align-items: center;
 }
 
+.boxes {
+  display: flex;
+}
+
 .box {
-  min-height: 100px;
+  min-height: 300px;
+  min-width: 220px;
   margin: 10px;
   border: 1px solid #999;
   display: flex;
   flex-direction: column;
   padding: 5px;
-}
-
-.box.dnd--is-drop-target {
-  border: 2px solid #ffdc9c;
 }
 
 .item {
@@ -33,6 +38,12 @@ body {
   margin: 5px;
   padding: 5px;
   background-color: #eee;
+}
+
+/**** styles for dragging ****/
+
+.box.dnd--is-drop-target {
+  border: 2px solid #ffdc9c;
 }
 
 .item.dnd--is-dragging {
