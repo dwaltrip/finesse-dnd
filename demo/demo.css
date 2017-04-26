@@ -27,7 +27,9 @@ body {
 
 .item {
   border: 1px solid #aaa;
-  width: 100px;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
   margin: 5px;
   padding: 5px;
   background-color: #eee;
