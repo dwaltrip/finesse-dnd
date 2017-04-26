@@ -1,15 +1,23 @@
 {
   "name": "finesse-dnd",
-  "version": "0.2.0-rc.1",
+  "version": "0.2.0-rc3",
   "description": "Powerful, lower-level drag & drop library that doesn't directly touch the DOM",
   "main": "finesse-dnd.js",
   "scripts": {
     "prebuild:lib": "shx mkdir -p dist",
     "build:lib": "babel src -d dist",
+
     "prebuild:demo": "shx mkdir -p demo/dist",
-    "build:demo": "browserify demo/app.js -t babelify --outfile demo/dist/app.js",
-    "prewatch:demo": "npm run build:demo",
-    "watch:demo": "watchify demo/app.js -t babelify --outfile demo/dist/app.js -v",
+
+    "build:demo:mithril": "browserify demo/mithril-app.js -t babelify --outfile demo/dist/mithril-app.js",
+    "build:demo:react":   "browserify demo/react-app.js   -t babelify --outfile demo/dist/react-app.js",
+
+    "prewatch:demo:mithril":  "npm run build:demo:mithril",
+    "prewatch:demo:react":    "npm run build:demo:react",
+
+    "watch:demo:mithril": "watchify demo/mithril-app.js -t babelify --outfile demo/dist/mithril-app.js -v",
+    "watch:demo:react":   "watchify demo/react-app.js   -t babelify --outfile demo/dist/react-app.js -v",
+
     "prepublish": "npm run build:lib"
   },
   "keywords": [
@@ -32,6 +40,8 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "mithril": "^1.1.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "shx": "^0.1.4",
     "watchify": "^3.8.0"
   }
