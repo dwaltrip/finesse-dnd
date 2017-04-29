@@ -21,6 +21,12 @@ export default {
       instance.eventHandlerDecorator = opts.eventHandlerDecorator;
     }
 
+    instance.finalEventHandlers = {
+      mousedown:  opts.onmousedown  || null,
+      mouseup:    opts.onmouseup    || null,
+      mousemove:  opts.onmousemove  || null
+    };
+
     addStylesheetRules([`.${DRAG_HANDLE_CSS_CLASS}:hover { cursor: move; }`]);
 
     return instance;
@@ -100,6 +106,14 @@ export default {
         // Fix this, so that this class has no knowledge of the mithril object
         // Move this knowledge into the mithril-helpers module
         return this.eventHandlerDecorator(this.m ,eventName, handler);
+      }
+      // New, somewhat approach. Still not ideal, should be using our custom drag hooks.
+      else if (this.finalEventHandlers[eventName] || this.finalEventHandlers.default) {
+        var finalHandler = (this.finalEventHandlers[eventName] || this.finalEventHandlers.default).bind(this);
+        return function(event) {
+          handler.call(this, event);
+          finalHandler(event);
+        };
       }
       return handler;
     },

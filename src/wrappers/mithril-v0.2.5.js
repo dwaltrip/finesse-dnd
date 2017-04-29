@@ -1,5 +1,5 @@
 import { assert } from '../utils/core';
-import handleWithRedraw from './handle-with-redraw';
+import throttle from '../utils/throttle';
 
 export default function forMithril(manager, m) {
   var _createDragItem = manager.createDragItem;
@@ -25,10 +25,7 @@ function mithrilifyItemOrZone(dragItemOrDropzone) {
   var _attachToElement = dragItemOrDropzone.attachToElement;
 
   dragItemOrDropzone.attachToElement = function(element, isInitialized, context) {
-    if (isInitialized && dragItemOrDropzone.onViewUpdate) {
-      dragItemOrDropzone.onRedraw(element); // we use this to re-add the dragHandle CSS class
-    }
-
+    if (isInitialized) { return; }
     _attachToElement.call(dragItemOrDropzone, element);
     context.onunload = ()=> dragItemOrDropzone.unattachFromElement();
   };
@@ -47,4 +44,36 @@ function eventHandlerDecorator(m, eventName, handler) {
   } else {
     throw new Error('mouseEventHandlerDecorator -- invalid event:', eventName)
   }
+}
+
+/**
+  Wrapper function for handlers for non-standard events that tells mithril to redraw
+  This is needed as mithril doesn't know how to handle non-standard events by default.
+  Also useful for any event handlers that need to be manually added/removed
+  outside of a mithril view function (e.g. 3rd party library).
+**/
+
+// this is based off of mithril's internal 'autoredraw' function
+function handleWithRedraw(m, callback, opts) {
+  var opts = opts || {};
+  var isThrottled = !!opts.throttleDelayAmount;
+  var isWaitingForRedraw = false;
+
+  var redraw = function() {
+    m.endComputation();
+    isWaitingForRedraw = false;
+  };
+  redraw = isThrottled ? throttle(redraw, opts.throttleDelayAmount) : redraw;
+
+  return function(event) {
+    if (!isWaitingForRedraw) {
+      m.startComputation();
+      isWaitingForRedraw = true;
+    }
+    try {
+      callback.call(this, event);
+    } finally {
+      redraw();
+    }
+  };
 }
