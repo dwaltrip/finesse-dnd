@@ -274,7 +274,7 @@ export default {
 
       this._removeListeners();
 
-      if (this.isDragging()) {
+      if (this.manager.isPreDrag() || this.manager.isMidDrag()) {
         this.manager._postDragCleanup();
       }
 
@@ -288,7 +288,7 @@ export default {
 
     // TODO: ensure this is always rendered in front of every other DOM element (stacking contexts, etc)
     _animateDragCursorPos: function() {
-      if (this.manager.isDragging()) {
+      if (this.manager.isMidDrag()) {
         requestAnimationFrame(this._animateDragCursorPos.bind(this));
 
         var left = this.lastMousePos.x - this.initialCursorOffset.x;

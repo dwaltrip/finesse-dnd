@@ -47,11 +47,9 @@ export default {
     dropzoneCount: 0,
     dragItemCount: 0,
 
-    isPreDrag: function() { return this._dragState === DRAG_STATE_PRE_DRAG; },
-    isMidDrag: function() { return this._dragState === DRAG_STATE_MID_DRAG; },
-
-    isDragging: function() { return this.isPreDrag() || this.isMidDrag(); },
-    isNotDragging: function() { return this._dragState === DRAG_STATE_NONE; },
+    isPreDrag:      function() { return this._dragState === DRAG_STATE_PRE_DRAG; },
+    isMidDrag:      function() { return this._dragState === DRAG_STATE_MID_DRAG; },
+    isNotDragging:  function() { return this._dragState === DRAG_STATE_NONE; },
 
     isDebugging: function() { return this._isDebugging; },
 
@@ -223,6 +221,8 @@ export default {
 
     _handlePreDrag: function() {
       this._dragState = DRAG_STATE_PRE_DRAG;
+      this._eligibleDropzones = [];
+      this._ineligibleDropzones = [];
     },
 
     _startDrag: function(dragItem, event) {
@@ -230,8 +230,6 @@ export default {
       this.activeDragItem = dragItem;
       this.targetDropzones = [];
 
-      this._eligibleDropzones = [];
-      this._ineligibleDropzones = [];
       // prep dropzones
       var dropzones = this.dropzonesByAcceptType[ACCEPT_ALL].concat(
         this.dropzonesByAcceptType[dragItem.group] || []
