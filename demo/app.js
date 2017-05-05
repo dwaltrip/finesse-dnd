@@ -1,6 +1,6 @@
 import m from 'mithril';
-import Dnd from '../src';
-import mithrilWrapper from '../src/wrappers/mithril';
+import Dnd from '../finesse-dnd';
+import throttle from '../throttle';
 
 var Box = {
   create: function(data) {
@@ -22,9 +22,15 @@ var Box = {
 };
 
 var App = {
-  controller: function() {
+  oninit: function() {
     window.ctrl = this;
-    this.dnd = mithrilWrapper(Dnd.create(), m);
+
+    var redraw = ()=> m.redraw();
+    this.dnd = Dnd.create({
+      onmousedown:  redraw,
+      onmouseup:    redraw,
+      onmousemove:  throttle(redraw, 100)
+    });
 
     this.data = [{ name: 'Foo' }, { name: 'Baz' }, { name: 'Testing..' }];
     this.boxes = [Box.create(), Box.create()];
@@ -49,15 +55,15 @@ var App = {
     }, false);
   },
 
-  view: function(ctrl) {
+  view: function() {
     return m('.demo-app',
-      m('.box-list', ctrl.boxes.map(function(box, i) {
+      m('.box-list', this.boxes.map((box, i)=> {
         return m('.box' + '.box-' + (i+1), {
           key: i,
-          config: ctrl.zones[i].attachToElement
+          oncreate: vnode => this.zones[i].attachToElement(vnode.dom)
         }, box.items.map(item => m('.item', {
           key: item.name,
-          config: item.dragItem.attachToElement
+          oncreate: vnode => item.dragItem.attachToElement(vnode.dom)
         }, item.name)));
       }))
     );
