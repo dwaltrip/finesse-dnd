@@ -23,7 +23,9 @@ export default {
       onmousedown: (event) => {
         instance._onMousedown(event);
         event.stopPropagation();
-        event.preventDefault();
+        // TODO: I can't remember why I had put this `preventDefault` here.
+        // I think it might have been related to when we were using regual <select> elements in code-blocks
+        // event.preventDefault();
       },
       onmousemove: (event) => {
         instance._onMousemove(event);
