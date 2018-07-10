@@ -1,3 +1,6 @@
 dist/
 demo/dist
+
 *.sublime-workspace
+node_modules/
+package-lock.json
